@@ -1,4 +1,5 @@
-﻿using Authentication.Basic.Models;
+﻿using Authentication.Basic.Data;
+using Authentication.Basic.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
@@ -21,9 +22,18 @@ namespace Authentication.Basic.Controllers
                 return View(model);
             }
 
+            User? user = UsersData.Users.FirstOrDefault(x => x.Name.Equals(model.UserName)
+                && x.Password.Equals(model.Password));
+
+            if (user is null)
+            {
+                return View(model);
+            }
+
             var claims = new List<Claim>()
             {
-                new Claim(ClaimTypes.Name, "Admin")
+                new Claim(ClaimTypes.Name, user.Name),
+                new Claim(ClaimTypes.Role, user.Role)
             };
 
             var claimIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -37,6 +47,11 @@ namespace Authentication.Basic.Controllers
         {
             await HttpContext.SignOutAsync();
             return Redirect("/Home/Index");
+        }
+
+        public ActionResult AccessDenied()
+        {
+            return View();
         }
     }
 }
