@@ -3,8 +3,7 @@
 
 <a asp-controller="Home" asp-action="Index">Home</a>
 
-<form asp-action="Login" method="post">
-    <input hidden asp-for="ReturnUrl" />
+<form asp-action="Registration" method="post">
     <div>
         <label>Логин</label>
         <input asp-for="UserName" />
@@ -15,7 +14,5 @@
         <input asp-for="Password" />
         <span asp-validation-for="Password"></span>
     </div>
-    <button type="submit">Вход</button>
+    <button type="submit">Регистрация</button>
 </form>
-
-<a asp-controller="Account" asp-action="Registration">Регистрация</a>
